@@ -46,39 +46,43 @@ export default {
 
 <style lang="scss">
 .code-snippet {
-  @include h-box;
+  position: relative;
   background: white;
   border-radius: 3px;
   font-family: 'Roboto Mono', monospace;
   font-size: 10pt;
   overflow: auto;
-  border-bottom: solid 2px $md-grey-300;
-  border-right: solid 1px $md-grey-100;
-  position: relative;
+  border-bottom: solid 2px colors.$md-grey-300;
+  border-right: solid 1px colors.$md-grey-100;
+  display: flex;
 
-  .line-numbers,
-  .render {
-    padding: 32px 24px;
+  & > * {
+    flex: auto 0 0;
   }
+}
 
-  .line-numbers {
-    background: $md-grey-200;
-    color: $md-grey-400;
-    border-radius: 2px 0 0 2px;
-  }
+.code-snippet .line-numbers,
+.code-snippet .render {
+  padding: 32px 24px;
+}
 
-  .render {
-    white-space: pre;
-  }
+.code-snippet .line-numbers {
+  background: colors.$md-grey-200;
+  color: colors.$md-grey-400;
+  border-radius: 2px 0 0 2px;
+}
 
-  .language {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: $md-grey-200;
-    color: $md-grey-400;
-    padding: 4px 4px 6px 6px;
-    border-radius: 0 0 0 2px;
-  }
+.code-snippet .render {
+  white-space: pre;
+}
+
+.code-snippet .language {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: colors.$md-grey-200;
+  color: colors.$md-grey-400;
+  padding: 4px 4px 6px 6px;
+  border-radius: 0 0 0 2px;
 }
 </style>

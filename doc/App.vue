@@ -66,7 +66,7 @@ body {
 }
 
 header {
-  background: $primary-color;
+  background: var.$primary-color;
   padding: 32px 20px 20px;
 
   .description {
@@ -82,43 +82,45 @@ header {
   word-break: break-word;
 }
 
-section {
-  .section-content {
-    margin: 0;
-    box-sizing: border-box;
-  }
-
-  &.nav {
-    text-align: center;
-    background: $primary-color;
-    padding: 40px 20px 0;
-    @include h-box;
-    @include box-center;
-
-    a {
-      display: inline-block;
-      padding: 0 16px;
-      height: 36px;
-      line-height: 36px;
-      color: white;
-      background: lighten($primary-color, 10%);
-      border-radius: 3px;
-
-      &:hover {
-        background: lighten($primary-color, 20%);
-      }
-
-      &:not(:last-child) {
-        margin-right: 8px;
-      }
-    }
-  }
+section .section-content {
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.collapse {
-  .section-content {
-    padding: 12px 0 40px 0;
-  }
+section.nav {
+  text-align: center;
+  background: var.$primary-color;
+  padding: 40px 20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+section.nav > * {
+  flex: auto 0 0;
+}
+
+section.nav a {
+  display: inline-block;
+  padding: 0 16px;
+  height: 36px;
+  line-height: 36px;
+  color: white;
+  background: color.scale(var.$primary-color, $lightness: 20%);
+  border-radius: 3px;
+}
+
+section.nav a:hover {
+  background: color.scale(var.$primary-color, $lightness: 40%);
+}
+
+section.nav a:not(:last-child) {
+  margin-right: 8px;
+}
+
+.collapse .section-content {
+  padding: 12px 0 40px 0;
 }
 
 h1 {
@@ -133,17 +135,17 @@ h2 {
 }
 
 a {
-  color: $primary-color;
+  color: var.$primary-color;
   text-decoration: none;
   cursor: pointer;
+}
 
-  &:hover {
-    color: lighten($primary-color, 10%);
-  }
+a:hover {
+  color: color.scale(var.$primary-color, $lightness: 20%);
 }
 
 .command {
-  background: darken($primary-color, 10%);
+  background: color.scale(var.$primary-color, $lightness: -20%);
   color: white;
   font-family: monospace;
   max-width: 500px;
@@ -167,7 +169,7 @@ a {
 
 .plus {
   text-align: center;
-  color: $primary-color;
+  color: var.$primary-color;
   font-size: 32px;
   margin: 12px;
 }
@@ -188,7 +190,7 @@ a {
 .more {
   font-size: 18px;
   text-align: center;
-  background: lighten($primary-color, 45%);
+  background: color.scale(var.$primary-color, $lightness: 85%);
   padding: 10px 0;
 }
 </style>

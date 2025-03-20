@@ -6,6 +6,8 @@
  * @Descripttion: 文档环境配置
  */
 
+const path = require('path')
+
 module.exports = {
   outputDir: './docs',
   publicPath: './',
@@ -39,12 +41,24 @@ module.exports = {
       .loader('babel-loader')
 
     // 别名配置
-    config.resolve.alias.set('@', '/doc').set('@packages', '/packages')
+    config.resolve.alias
+      .set('@', path.resolve(__dirname, '../doc'))
+      .set('@packages', path.resolve(__dirname, '../packages'))
   },
   css: {
     loaderOptions: {
       sass: {
-        data: '@import "~@/style/imports.scss";'
+        sassOptions: {
+          // 设置 Sass 的严格模式，这有助于减少一些警告
+          charset: false,
+          outputStyle: 'expanded'
+        },
+        additionalData: `
+          @use "sass:color";
+          @use "@/style/mixins" as mix;
+          @use "@/style/vars" as var;
+          @use "@/style/md-colors" as colors;
+        `
       }
     }
   }

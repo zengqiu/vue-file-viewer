@@ -1,4 +1,4 @@
-@import './mixins';
-@import './vars';
-@import './md-colors';
+@use './mixins' as mix;
+@use './vars' as var;
+@use './md-colors' as colors;
 

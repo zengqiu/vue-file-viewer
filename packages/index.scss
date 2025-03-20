@@ -139,7 +139,7 @@
     }
   }
 
-  /deep/ .output > div {
+  :deep(.output > div) {
     height: 100%;
   }
 }
