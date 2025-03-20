@@ -6,7 +6,7 @@
  * @Descripttion: 渲染图片的容器
 -->
 <template>
-  <viewer :images="images">
+  <viewer :images="images" class="image-container">
     <img
       v-for="item in images"
       alt="图片"
@@ -45,9 +45,22 @@ export default {
 </script>
 
 <style scoped>
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .image {
   display: block;
-  width: 80%;
-  margin: 0 auto;
+  width: auto;
+  height: auto;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100vh;
+  object-fit: contain;
 }
 </style>

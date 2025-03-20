@@ -11,6 +11,21 @@
         </button>
         <div class="overlay">
           <span v-if="isUrl" style="white-space: pre;">
+            <div style="margin-bottom: 10px;">
+              <select
+                v-model="selectedFileType"
+                @change="handleFileTypeChange"
+                style="height: 30px; border-radius: 6px; margin-right: 10px; padding: 0 5px;"
+              >
+                <option value="">请选择文件类型</option>
+                <option value="docx">Word文档</option>
+                <option value="pptx">PPT文档</option>
+                <option value="pdf">PDF文档</option>
+                <option value="png">PNG图片</option>
+                <option value="mp4">MP4视频</option>
+                <option value="mp3">MP3音频</option>
+              </select>
+            </div>
             <input
               type="text"
               v-model="inputUrl"
@@ -18,6 +33,13 @@
             />
             <button type="button" @click.stop="loadFromUrl(inputUrl, true)">
               预览
+            </button>
+            <button
+              type="button"
+              @click.stop="clearSelection"
+              style="background: #f5f5f5; color: #333; margin-left: 5px;"
+            >
+              清除
             </button>
           </span>
           <span v-else>
@@ -107,7 +129,18 @@ export default {
       // 安全宽度（低于此内容无法展示全）
       safeWith: 1400,
       // 当前文档的缩放比例
-      clientZoom: 1
+      clientZoom: 1,
+      // 用于存储选择的文件类型
+      selectedFileType: '',
+      // 文件类型示例URL配置
+      fileTypeExamples: {
+        mp3: window.location.origin + '/fileTest/mp3.mp3',
+        mp4: window.location.origin + '/fileTest/mp4.mp4',
+        pdf: window.location.origin + '/fileTest/pdf.pdf',
+        png: window.location.origin + '/fileTest/pic.png',
+        pptx: window.location.origin + '/fileTest/ppt.pptx',
+        docx: window.location.origin + '/fileTest/word.docx'
+      }
     }
   },
   mounted() {
@@ -243,11 +276,8 @@ export default {
       this.uploadFileName = name
       // 取得扩展名并统一转小写兼容大写
       const extend = getExtend(name).toLowerCase()
-      // 媒体和图片类型/不支持的类型不显示缩放按钮
-      if (
-        [...typeInfo.image, ...typeInfo.video].includes(extend) ||
-        !renders[extend]
-      ) {
+      // 不支持的类型不显示缩放按钮
+      if (!renders[extend]) {
         this.showScale = false
       } else {
         this.showScale = true
@@ -264,12 +294,49 @@ export default {
           .then(() => {
             // 渲染结束调整缩放比例
             this.$nextTick(() => {
-              this.bodyScale()
+              // 对音频、视频和图片类型特殊处理缩放比例
+              const isAudio = typeInfo.audio && typeInfo.audio.includes(extend)
+              const isVideo = typeInfo.video && typeInfo.video.includes(extend)
+              const isImage = typeInfo.image && typeInfo.image.includes(extend)
+
+              if (isAudio || isVideo || isImage) {
+                // 对于音频、视频和图片类型，固定缩放比例为1，不根据屏幕宽度自动缩放
+                this.clientZoom = 1
+              } else {
+                // 其他类型使用正常的缩放计算
+                this.bodyScale()
+              }
             })
             resolve()
           })
           .catch(reject)
       )
+    },
+    // 处理文件类型选择的逻辑
+    handleFileTypeChange() {
+      if (
+        this.selectedFileType &&
+        this.fileTypeExamples[this.selectedFileType]
+      ) {
+        // 根据选择的文件类型填充对应的示例URL
+        this.inputUrl = this.fileTypeExamples[this.selectedFileType]
+
+        // 直接自动触发预览
+        this.loadFromUrl(this.inputUrl, true)
+      } else {
+        // 如果没有选择文件类型或没有对应的示例URL，清空输入框
+        this.inputUrl = ''
+      }
+    },
+
+    // 清除选择和输入框
+    clearSelection() {
+      this.selectedFileType = ''
+      this.inputUrl = ''
+      // 清空输出区域
+      if (this.$refs.output) {
+        this.$refs.output.innerHTML = ''
+      }
     }
   }
 }
