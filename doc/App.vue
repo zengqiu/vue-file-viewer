@@ -21,11 +21,14 @@
       <div>
         (©) 2023 - {{ new Date().getFullYear() }} copy by
         <a href="https://blog.me7.cn/" target="_blank">追寻</a>
+
+        提供源码内核思路
+      </div>
+      <div>
         特别鸣谢
         <a href="https://blog.csdn.net/wybaby168/" target="_blank">
           小爬的老粉丝
         </a>
-        提供源码内核思路
       </div>
     </section>
   </div>
