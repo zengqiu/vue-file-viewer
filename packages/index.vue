@@ -50,8 +50,8 @@
     </div>
     <div v-show="!loading && showScale" class="ctrol_btn">
       <span>
-        <span class="scale_add" @click="scaleBtn('add')">＋</span>
-        <span class="scale_reduce" @click="scaleBtn('reduce')">－</span>
+        <span class="scale_add" @click="scaleBtn('add')"></span>
+        <span class="scale_reduce" @click="scaleBtn('reduce')"></span>
       </span>
       <span style="padding-right:15px;color:rgba(255,255,255,0.3)">|</span>
       <span
