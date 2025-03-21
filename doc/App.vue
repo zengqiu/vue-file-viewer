@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <h1>{{ config.name }}</h1>
-      <div class="command">npm install --save {{ config.name }}</div>
+      <h1>vue-file-viewer</h1>
       <div class="description">{{ config.description }}</div>
       <section class="nav">
         <router-link v-for="d in routes" :key="d.path" :to="d.path">
@@ -13,6 +12,44 @@
         </a>
         <a @click="toggleFullscreen">切换全屏</a>
       </section>
+      <div
+        class="command-container"
+        v-if="$route.path === '/' || $route.path === '/home'"
+      >
+        <div class="command-title">推荐 iframe 引入方式</div>
+        <div class="command-steps">
+          <div class="step">
+            <div class="step-title">STEP 1: 下载最新资源包</div>
+            <div class="step-content">
+              <a
+                href="https://github.com/zyl-ui/vue-file-viewer/releases"
+                target="_blank"
+                class="download-link"
+              >
+                点此下载 releases 版本
+              </a>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-title">
+              STEP 2: 将项目中的 vue-file-viewer 文件夹拷贝到您自己的项目公共目录（如Pubilc文件夹下）
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-title">STEP 3: iframe 引入</div>
+            <div class="step-content code-block">
+              <pre>
+<code>&lt;iframe 
+  src="./file-viewer/index.html?fileUrl=https://file-viewer.me7.cn/fileTest/pdf.pdf"
+  scrolling="auto"
+  id="file-viewer"
+  style="border:0;height: 500px;width:100%"
+/&gt;</code>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <router-view />
@@ -76,6 +113,76 @@ header {
     color: white;
     margin-top: 24px;
   }
+}
+
+.command-container {
+  max-width: 700px;
+  margin: 20px auto;
+  background: color.scale(var.$primary-color, $lightness: -20%);
+  border-radius: 6px;
+  padding: 16px;
+  color: white;
+
+  .command-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+  }
+
+  .command-steps {
+    .step {
+      margin-bottom: 14px;
+
+      .step-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .step-content {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        padding: 10px;
+      }
+
+      .download-link {
+        color: #fff;
+        text-decoration: underline;
+
+        &:hover {
+          color: color.scale(var.$primary-color, $lightness: 80%);
+        }
+      }
+
+      .code-block {
+        pre {
+          margin: 0;
+          overflow-x: auto;
+
+          code {
+            white-space: pre;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+}
+
+.command {
+  background: color.scale(var.$primary-color, $lightness: -20%);
+  color: white;
+  font-family: monospace;
+  max-width: 500px;
+  margin: 12px auto;
+  border-radius: 2px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .page-content {
@@ -145,18 +252,6 @@ a {
 
 a:hover {
   color: color.scale(var.$primary-color, $lightness: 20%);
-}
-
-.command {
-  background: color.scale(var.$primary-color, $lightness: -20%);
-  color: white;
-  font-family: monospace;
-  max-width: 500px;
-  margin: 12px auto;
-  border-radius: 2px;
-  padding: 12px 24px;
-  box-sizing: border-box;
-  text-align: center;
 }
 
 .description {

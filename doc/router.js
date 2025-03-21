@@ -13,8 +13,8 @@ import Start from './views/Start.vue'
 Vue.use(VueRouter)
 
 export const routes = [
-  { path: '/', name: 'Home', component: Home },
-  { path: '/start', name: '快速上手', component: Start },
+  { path: '/', name: '快速上手', component: Home },
+  { path: '/start', name: '使用文档', component: Start },
   { path: '*', redirect: '/' }
 ]
 
