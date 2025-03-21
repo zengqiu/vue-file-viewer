@@ -299,9 +299,12 @@ export default {
               const isVideo = typeInfo.video && typeInfo.video.includes(extend)
               const isImage = typeInfo.image && typeInfo.image.includes(extend)
 
-              if (isAudio || isVideo || isImage) {
-                // 对于音频、视频和图片类型，固定缩放比例为1，不根据屏幕宽度自动缩放
+              if (isAudio || isVideo) {
+                // 对于音频、视频，固定缩放比例为1，不根据屏幕宽度自动缩放
                 this.clientZoom = 1
+              } else if (isImage) {
+                //对于图片类型，固定缩放比例为0.7，不根据屏幕宽度自动缩放
+                this.clientZoom = 0.7
               } else {
                 // 其他类型使用正常的缩放计算
                 this.bodyScale()
