@@ -116,6 +116,8 @@ export default {
       isUrl: true,
       // input输入的url
       inputUrl: '',
+      // 当前浏览的文件拓展名
+      extend:'',
       // 上传文件名
       uploadFileName: '',
       // 通过iframe传入的文件
@@ -209,9 +211,9 @@ export default {
       // 要预览的文件地址
       this.uploadFileName = url.substr(url.lastIndexOf('/') + 1)
       // 取得扩展名并统一转小写兼容大写
-      const extend = getExtend(this.uploadFileName).toLowerCase()
+      this.extend = getExtend(this.uploadFileName).toLowerCase()
       // 判断是否为office文件
-      const isOffice = typeInfo.office.find((item) => item.indexOf(extend) > -1)
+      const isOffice = typeInfo.office.find((item) => item.indexOf(this.extend) > -1)
       // 判断是否需要使用外部微软第三方office在线浏览的方式
       if (useOfficeMicroOnline && isOffice) {
         // 展示微软第三方office在线浏览
@@ -233,7 +235,7 @@ export default {
         responseType: 'blob'
       })
         .then(({ data }) => {
-          const file = new File([data], this.uploadFileName, {})
+          const file = new File([data], this.uploadFileName, { type: data.type || ''})
           this.handleChange({ target: { files: [file] } })
         })
         .finally(() => {
@@ -245,7 +247,7 @@ export default {
           renders['notFind'](
             url,
             this.$refs.output,
-            extend,
+            this.extend,
             this.uploadFileName
           )
         })
@@ -271,11 +273,12 @@ export default {
     },
     // 文件信息处理，对应文件渲染方法
     displayResult(buffer, file) {
+      console.log('file', file)
       // 取得文件名
-      const { name } = file
+      const { name , type } = file
       this.uploadFileName = name
       // 取得扩展名并统一转小写兼容大写
-      const extend = getExtend(name).toLowerCase()
+      const extend = type.split('/')[1] || this.extend || getExtend(name).toLowerCase()
       // 不支持的类型不显示缩放按钮
       if (!renders[extend]) {
         this.showScale = false
