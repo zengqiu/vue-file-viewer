@@ -18,7 +18,22 @@
         <div class="property-item">
           <div class="property-name">useOfficeMicroOnline</div>
           <div class="property-type">boolean</div>
-          <div class="property-desc">是否开启使用微软提供的office文件在线访问接口（内网无效，可选，默认false关闭）</div>
+          <div class="property-desc">是否开启使用微软提供的office文件在线访问接口（仅office文件格式有效: [docx, pptx, xlsx], 内网使用无效，可选，默认false）</div>
+        </div>
+        <div class="property-item">
+          <div class="property-name">showCtrolBtn</div>
+          <div class="property-type">boolean</div>
+          <div class="property-desc">v1.3.2 是否显示控制工具按钮块（可选，默认true）</div>
+        </div>
+        <div class="property-item">
+          <div class="property-name">showScaleBtn</div>
+          <div class="property-type">boolean</div>
+          <div class="property-desc">v1.3.2 是否显示放大缩小按钮（可选，默认true）</div>
+        </div>
+        <div class="property-item">
+          <div class="property-name">showDownLoadBtn</div>
+          <div class="property-type">boolean</div>
+          <div class="property-desc">v1.3.2 是否显示下载按钮（可选，默认true）</div>
         </div>
       </div>
 
@@ -578,12 +593,12 @@ export default {
   color: #409eff;
   margin-right: 10px;
   font-size: 14px;
+  height: fit-content;
 }
 
 .property-desc {
   flex: 1;
   min-width: 300px;
-  margin-top: 5px;
 }
 
 .note-list, .step-list {

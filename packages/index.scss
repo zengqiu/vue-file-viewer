@@ -103,9 +103,12 @@
       user-select: none;
     }
 
+    .scale_add{
+      margin-right: 15px;
+    }
+
     .scale_add,
     .scale_reduce {
-      margin-right: 15px;
       width: 28px;
       height: 28px;
       display: inline-flex;

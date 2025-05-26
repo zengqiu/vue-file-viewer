@@ -32,19 +32,19 @@
           </div>
           <div class="step">
             <div class="step-title">
-              STEP 2: 将项目中的 vue-file-viewer 文件夹拷贝到您自己的项目公共目录（如Pubilc文件夹下）
+              STEP 2: 将项目中的 file-viewer 文件夹拷贝到您自己的项目公共目录（如Pubilc文件夹下）
             </div>
           </div>
           <div class="step">
             <div class="step-title">STEP 3: iframe 引入</div>
             <div class="step-content code-block">
               <pre>
-<code>&lt;iframe 
-  src="./file-viewer/index.html?fileUrl=https://file-viewer.me7.cn/fileTest/pdf.pdf"
-  scrolling="auto"
-  id="file-viewer"
-  style="border:0;height: 500px;width:100%"
-/&gt;</code>
+                <code>&lt;iframe 
+                  src="./file-viewer/index.html?fileUrl=https://file-viewer.me7.cn/fileTest/pdf.pdf"
+                  scrolling="auto"
+                  id="file-viewer"
+                  style="border:0;height: 500px;width:100%"
+                /&gt;</code>
               </pre>
             </div>
           </div>

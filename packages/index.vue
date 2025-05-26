@@ -1,6 +1,6 @@
 <template>
   <div class="vue-file-viewer" id="vue-file-viewer">
-    <div class="banner" v-if="shoHead || !hidden">
+    <div class="banner" v-if="options.shoHead">
       <div class="file-select">
         <button
           type="button"
@@ -31,7 +31,10 @@
               v-model="inputUrl"
               placeholder="请输入浏览文件地址"
             />
-            <button type="button" @click.stop="loadFromUrl(inputUrl, true)">
+            <button
+              type="button"
+              @click.stop="loadFromUrl(inputUrl, { shoHead: true })"
+            >
               预览
             </button>
             <button
@@ -48,17 +51,24 @@
         </div>
       </div>
     </div>
-    <div v-show="!loading && showScale" class="ctrol_btn">
-      <span>
+    <div class="ctrol_btn" v-if="!loading && options.showCtrolBtn">
+      <span v-show="options.showScaleBtn">
         <span class="scale_add" @click="scaleBtn('add')"></span>
         <span class="scale_reduce" @click="scaleBtn('reduce')"></span>
       </span>
-      <span style="padding-right:15px;color:rgba(255,255,255,0.3)">|</span>
-      <span
-        class="download"
-        @click="fileDownload(inputUrl || iframeFile, uploadFileName)"
-      >
-        下载
+      <span v-show="options.showDownLoadBtn">
+        <span
+          v-show="options.showScaleBtn"
+          style="padding:0 15px;color:rgba(255,255,255,0.3)"
+        >
+          |
+        </span>
+        <span
+          class="download"
+          @click="fileDownload(inputUrl || iframeFile, uploadFileName)"
+        >
+          下载
+        </span>
       </span>
     </div>
     <div style="height: 100%;width: 100%;">
@@ -104,6 +114,21 @@ export default {
       type: Boolean,
       default: false
     },
+    // 是否显示控制按钮
+    showCtrolBtn: {
+      type: Boolean,
+      default: true
+    },
+    // 是否显示放大缩小按钮
+    showScaleBtn: {
+      type: Boolean,
+      default: true
+    },
+    // 是否显示下载按钮
+    showDownLoadBtn: {
+      type: Boolean,
+      default: true
+    },
     // 是否开启使用内置的微软文档在线访问接口
     useOfficeMicroOnline: {
       type: Boolean,
@@ -117,17 +142,25 @@ export default {
       // input输入的url
       inputUrl: '',
       // 当前浏览的文件拓展名
-      extend:'',
+      extend: '',
       // 上传文件名
       uploadFileName: '',
       // 通过iframe传入的文件
       iframeFile: '',
       // 加载状态跟踪
       loading: false,
-      // 是否开启放大缩小按钮
-      showScale: false,
-      // 隐藏头部，当基于消息机制渲染，将隐藏
-      hidden: false,
+      options: {
+        // 是否显示头部，当基于消息机制渲染，将隐藏
+        shoHead: false,
+        // 是否显示控制按钮
+        showCtrolBtn: true,
+        // 是否显示放大缩小按钮
+        showScaleBtn: true,
+        // 是否显示下载按钮
+        showDownLoadBtn: true,
+        // 是否开启使用内置的微软文档在线访问接口
+        useOfficeMicroOnline: false
+      },
       // 安全宽度（低于此内容无法展示全）
       safeWith: 1400,
       // 当前文档的缩放比例
@@ -147,9 +180,25 @@ export default {
   },
   mounted() {
     // 作为iframe使用时，允许使用预留的消息机制发送二进制数据，必须在url后添加?name=xxx.xxx&from=xxx
-    const { from, name, fileUrl, shoHead, useOfficeMicroOnline } = parse(
-      location.search.substring(1)
-    )
+    const {
+      from,
+      name,
+      fileUrl,
+      shoHead,
+      useOfficeMicroOnline,
+      showCtrolBtn,
+      showScaleBtn,
+      showDownLoadBtn
+    } = parse(location.search.substring(1))
+
+    const opt1 = {
+      shoHead: shoHead === 'true' ? true : false,
+      useOfficeMicroOnline: useOfficeMicroOnline === 'true' ? true : false,
+      showCtrolBtn: showCtrolBtn === 'false' ? false : true,
+      showScaleBtn: showScaleBtn === 'false' ? false : true,
+      showDownLoadBtn: showDownLoadBtn === 'false' ? false : true
+    }
+
     if (from) {
       window.addEventListener('message', (event) => {
         const { origin, data: blob } = event
@@ -157,25 +206,29 @@ export default {
           // 构造响应，自动渲染
           const file = new File([blob], name, {})
           this.iframeFile = file
-          this.loadFromBlob(file)
+          this.loadFromBlob(file, opt1)
         }
       })
     }
+
     // 作为iframe使用时，允许通过链接传参获取文件链接数据
     if (fileUrl) {
       this.iframeFile = fileUrl
-      this.loadFromUrl(fileUrl, Boolean(shoHead), Boolean(useOfficeMicroOnline))
-    }
-    // 作为组件使用时，允许接收不同格式的文件数据（链接 or file）
-    if (this.fileUrl) {
+      this.loadFromUrl(fileUrl, opt1)
+    } else {
+      const opt2 = {
+        shoHead: this.shoHead,
+        useOfficeMicroOnline: this.useOfficeMicroOnline,
+        showCtrolBtn: this.showCtrolBtn,
+        showScaleBtn: this.showScaleBtn,
+        showDownLoadBtn: this.showDownLoadBtn
+      }
+      // 作为组件使用时，允许接收不同格式的文件数据（链接 or file）
       typeof this.fileUrl === 'string'
-        ? this.loadFromUrl(
-            this.fileUrl,
-            this.shoHead,
-            this.useOfficeMicroOnline
-          )
-        : this.loadFromBlob(this.fileUrl)
+        ? this.loadFromUrl(this.fileUrl, opt2)
+        : this.loadFromBlob(this.fileUrl, opt2)
     }
+
     // 窗体大小改变时自动计算缩放比例
     window.onload = window.onresize = () => {
       this.bodyScale()
@@ -201,11 +254,13 @@ export default {
       this.clientZoom = scale
     },
     // 从url加载
-    loadFromUrl(url, shoHead = false, useOfficeMicroOnline = false) {
+    loadFromUrl(url, options = {}) {
+      // 保存配置项
+      this.options = Object.assign(this.options, options)
+
       // 校验链接是否合法
       if (!url) return
 
-      this.hidden = !shoHead //隐藏头部
       this.loading = true
       this.inputUrl = url
       // 要预览的文件地址
@@ -213,9 +268,11 @@ export default {
       // 取得扩展名并统一转小写兼容大写
       this.extend = getExtend(this.uploadFileName).toLowerCase()
       // 判断是否为office文件
-      const isOffice = typeInfo.office.find((item) => item.indexOf(this.extend) > -1)
+      const isOffice = typeInfo.office.find(
+        (item) => item.indexOf(this.extend) > -1
+      )
       // 判断是否需要使用外部微软第三方office在线浏览的方式
-      if (useOfficeMicroOnline && isOffice) {
+      if (options.useOfficeMicroOnline && isOffice) {
         // 展示微软第三方office在线浏览
         renders['officeOnline'](
           url,
@@ -235,7 +292,9 @@ export default {
         responseType: 'blob'
       })
         .then(({ data }) => {
-          const file = new File([data], this.uploadFileName, { type: data.type || ''})
+          const file = new File([data], this.uploadFileName, {
+            type: data.type || ''
+          })
           this.handleChange({ target: { files: [file] } })
         })
         .finally(() => {
@@ -253,8 +312,10 @@ export default {
         })
     },
     // 从file文件流加载
-    loadFromBlob(file) {
-      this.hidden = true //隐藏头部
+    loadFromBlob(file, options = {}) {
+      // 保存配置项
+      this.options = Object.assign(this.options, options)
+
       this.handleChange({ target: { files: [file] } })
     },
     // 监听上传事件获取文件信息，并处理文件
@@ -273,18 +334,12 @@ export default {
     },
     // 文件信息处理，对应文件渲染方法
     displayResult(buffer, file) {
-      console.log('file', file)
       // 取得文件名
-      const { name , type } = file
+      const { name, type } = file
       this.uploadFileName = name
       // 取得扩展名并统一转小写兼容大写
-      const extend = type.split('/')[1] || this.extend || getExtend(name).toLowerCase()
-      // 不支持的类型不显示缩放按钮
-      if (!renders[extend]) {
-        this.showScale = false
-      } else {
-        this.showScale = true
-      }
+      const extend =
+        this.extend || getExtend(name).toLowerCase() || type.split('/')[1]
       // 生成新的dom
       const node = document.createElement('div')
       // 清空容器里的元素
@@ -328,7 +383,7 @@ export default {
         this.inputUrl = this.fileTypeExamples[this.selectedFileType]
 
         // 直接自动触发预览
-        this.loadFromUrl(this.inputUrl, true)
+        this.loadFromUrl(this.inputUrl, { shoHead: true })
       } else {
         // 如果没有选择文件类型或没有对应的示例URL，清空输入框
         this.inputUrl = ''
