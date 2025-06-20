@@ -52,8 +52,10 @@ export async function readText(buffer) {
  * @param {string} name 文件名
  */
 export function getExtend(name) {
-  const dot = name.lastIndexOf('.')
-  return name.substring(dot + 1)
+  // 移除 URL 参数和哈希片段
+  const cleanName = name.split('?')[0].split('#')[0]
+  const dot = cleanName.lastIndexOf('.')
+  return dot === -1 ? '' : cleanName.substring(dot + 1)
 }
 
 /**

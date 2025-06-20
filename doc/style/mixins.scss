@@ -19,19 +19,29 @@
 
 @mixin flex-box {
   display: flex;
-
+  
   & > * {
     flex: auto 0 0;
   }
 }
 
 @mixin h-box {
-  @include flex-box;
+  display: flex;
+  
+  & > * {
+    flex: auto 0 0;
+  }
+  
   flex-direction: row;
 }
 
 @mixin v-box {
-  @include flex-box;
+  display: flex;
+  
+  & > * {
+    flex: auto 0 0;
+  }
+  
   flex-direction: column;
 }
 
@@ -42,6 +52,10 @@
 @mixin box-center {
   align-items: center;
   justify-content: center;
+}
+
+@function fade($color, $amount) {
+  @return color.adjust($color, $alpha: -$amount / 100%);
 }
 
 @mixin toolbar-btn ($bg) {

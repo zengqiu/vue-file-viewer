@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <h1>{{ config.name }}</h1>
-      <div class="command">npm install --save {{ config.name }}</div>
+      <h1>vue-file-viewer</h1>
       <div class="description">{{ config.description }}</div>
       <section class="nav">
         <router-link v-for="d in routes" :key="d.path" :to="d.path">
@@ -13,6 +12,44 @@
         </a>
         <a @click="toggleFullscreen">切换全屏</a>
       </section>
+      <div
+        class="command-container"
+        v-if="$route.path === '/' || $route.path === '/home'"
+      >
+        <div class="command-title">推荐 iframe 引入方式</div>
+        <div class="command-steps">
+          <div class="step">
+            <div class="step-title">STEP 1: 下载最新资源包</div>
+            <div class="step-content">
+              <a
+                href="https://github.com/zyl-ui/vue-file-viewer/releases"
+                target="_blank"
+                class="download-link"
+              >
+                点此下载 releases 版本
+              </a>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-title">
+              STEP 2: 将项目中的 file-viewer 文件夹拷贝到您自己的项目公共目录（如Pubilc文件夹下）
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-title">STEP 3: iframe 引入</div>
+            <div class="step-content code-block">
+              <pre>
+                <code>&lt;iframe 
+                  src="./file-viewer/index.html?fileUrl=https://file-viewer.me7.cn/fileTest/pdf.pdf"
+                  scrolling="auto"
+                  id="file-viewer"
+                  style="border:0;height: 500px;width:100%"
+                /&gt;</code>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <router-view />
@@ -21,11 +58,14 @@
       <div>
         (©) 2023 - {{ new Date().getFullYear() }} copy by
         <a href="https://blog.me7.cn/" target="_blank">追寻</a>
+
+        提供源码内核思路
+      </div>
+      <div>
         特别鸣谢
         <a href="https://blog.csdn.net/wybaby168/" target="_blank">
           小爬的老粉丝
         </a>
-        提供源码内核思路
       </div>
     </section>
   </div>
@@ -66,13 +106,83 @@ body {
 }
 
 header {
-  background: $primary-color;
+  background: var.$primary-color;
   padding: 32px 20px 20px;
 
   .description {
     color: white;
     margin-top: 24px;
   }
+}
+
+.command-container {
+  max-width: 700px;
+  margin: 20px auto;
+  background: color.scale(var.$primary-color, $lightness: -20%);
+  border-radius: 6px;
+  padding: 16px;
+  color: white;
+
+  .command-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+  }
+
+  .command-steps {
+    .step {
+      margin-bottom: 14px;
+
+      .step-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .step-content {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        padding: 10px;
+      }
+
+      .download-link {
+        color: #fff;
+        text-decoration: underline;
+
+        &:hover {
+          color: color.scale(var.$primary-color, $lightness: 80%);
+        }
+      }
+
+      .code-block {
+        pre {
+          margin: 0;
+          overflow-x: auto;
+
+          code {
+            white-space: pre;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+}
+
+.command {
+  background: color.scale(var.$primary-color, $lightness: -20%);
+  color: white;
+  font-family: monospace;
+  max-width: 500px;
+  margin: 12px auto;
+  border-radius: 2px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .page-content {
@@ -82,43 +192,45 @@ header {
   word-break: break-word;
 }
 
-section {
-  .section-content {
-    margin: 0;
-    box-sizing: border-box;
-  }
-
-  &.nav {
-    text-align: center;
-    background: $primary-color;
-    padding: 40px 20px 0;
-    @include h-box;
-    @include box-center;
-
-    a {
-      display: inline-block;
-      padding: 0 16px;
-      height: 36px;
-      line-height: 36px;
-      color: white;
-      background: lighten($primary-color, 10%);
-      border-radius: 3px;
-
-      &:hover {
-        background: lighten($primary-color, 20%);
-      }
-
-      &:not(:last-child) {
-        margin-right: 8px;
-      }
-    }
-  }
+section .section-content {
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.collapse {
-  .section-content {
-    padding: 12px 0 40px 0;
-  }
+section.nav {
+  text-align: center;
+  background: var.$primary-color;
+  padding: 40px 20px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+section.nav > * {
+  flex: auto 0 0;
+}
+
+section.nav a {
+  display: inline-block;
+  padding: 0 16px;
+  height: 36px;
+  line-height: 36px;
+  color: white;
+  background: color.scale(var.$primary-color, $lightness: 20%);
+  border-radius: 3px;
+}
+
+section.nav a:hover {
+  background: color.scale(var.$primary-color, $lightness: 40%);
+}
+
+section.nav a:not(:last-child) {
+  margin-right: 8px;
+}
+
+.collapse .section-content {
+  padding: 12px 0 40px 0;
 }
 
 h1 {
@@ -133,25 +245,13 @@ h2 {
 }
 
 a {
-  color: $primary-color;
+  color: var.$primary-color;
   text-decoration: none;
   cursor: pointer;
-
-  &:hover {
-    color: lighten($primary-color, 10%);
-  }
 }
 
-.command {
-  background: darken($primary-color, 10%);
-  color: white;
-  font-family: monospace;
-  max-width: 500px;
-  margin: 12px auto;
-  border-radius: 2px;
-  padding: 12px 24px;
-  box-sizing: border-box;
-  text-align: center;
+a:hover {
+  color: color.scale(var.$primary-color, $lightness: 20%);
 }
 
 .description {
@@ -167,7 +267,7 @@ a {
 
 .plus {
   text-align: center;
-  color: $primary-color;
+  color: var.$primary-color;
   font-size: 32px;
   margin: 12px;
 }
@@ -188,7 +288,7 @@ a {
 .more {
   font-size: 18px;
   text-align: center;
-  background: lighten($primary-color, 45%);
+  background: color.scale(var.$primary-color, $lightness: 85%);
   padding: 10px 0;
 }
 </style>

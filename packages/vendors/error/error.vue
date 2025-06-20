@@ -12,7 +12,7 @@
       <span style="color:skyblue">.{{ fileType }}</span>
       格式的在线预览，请下载后预览或转换为支持的格式
       <br />
-      支持docx, xlsx, pptx, pdf, 以及纯文本格式和各种图片格式的在线预览
+      支持pptx,docx,xlsx,pdf,视频,音频,纯文本和图片的在线预览
     </div>
     <button class="download" @click="fileDownload(url, fileName)">
       下载{{ fileName }}

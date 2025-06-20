@@ -7,7 +7,7 @@
 -->
 <template>
   <div>
-    <vue-file-viewer />
+    <vue-file-viewer shoHead/>
   </div>
 </template>
 

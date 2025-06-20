@@ -15,8 +15,10 @@ export default function(buffer, target) {
   const mp4 = document.createElement('video')
   mp4.controls = true
   mp4.style.width = '100%'
+  mp4.style.height = '100%'
   mp4.style.display = 'table'
   mp4.style.margin = 'auto'
+  mp4.style.objectFit = 'contain'
   const source = document.createElement('source')
   source.src = URL.createObjectURL(new Blob([buffer]))
   mp4.appendChild(source)

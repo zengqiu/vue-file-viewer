@@ -31,7 +31,8 @@ export default function(url, target) {
       height: 100%;
       line-height: 100%;
       color: skyblue;
-      text-decoration: underline
+      text-decoration: underline;
+      cursor: pointer;
     `
     span.onclick = function() {
       window.top.location.href = link
