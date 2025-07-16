@@ -181,7 +181,18 @@ export default {
           row._cells.map((item) => {
             const value = item.model.value
             if (value) {
-              return value.richText ? value.richText.text : value
+              // 处理单元格内原始数据
+              if (value.richText) {
+                let text = value.richText.text
+                if (Array.isArray(value.richText)) {
+                  text = value.richText.reduce(
+                    (prev, curr) => prev + curr.text,
+                    ''
+                  )
+                }
+                return text
+              }
+              return value
             }
             return ''
           })
