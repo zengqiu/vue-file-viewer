@@ -40,7 +40,7 @@
             <div class="step-content code-block">
               <pre>
                 <code>&lt;iframe 
-                  src="./file-viewer/index.html?fileUrl=https://file-viewer.me7.cn/fileTest/pdf.pdf"
+                  src="./file-viewer/index.html?fileUrl=https://file-viewer.yiwowang.com/fileTest/pdf.pdf"
                   scrolling="auto"
                   id="file-viewer"
                   style="border:0;height: 500px;width:100%"
@@ -57,7 +57,7 @@
     <section class="more">
       <div>
         (©) 2023 - {{ new Date().getFullYear() }} copy by
-        <a href="https://blog.me7.cn/" target="_blank">追寻</a>
+        <a href="https://blog.yiwowang.com/" target="_blank">追寻</a>
 
         提供源码内核思路
       </div>
