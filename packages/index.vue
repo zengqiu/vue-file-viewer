@@ -313,6 +313,8 @@ export default {
     },
     // 从file文件流加载
     loadFromBlob(file, options = {}) {
+      // 直接下载 Blob 文件
+      this.inputUrl = file
       // 保存配置项
       this.options = Object.assign(this.options, options)
 
