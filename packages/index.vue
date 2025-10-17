@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { getExtend, readBuffer, render, fileDownload } from './util'
+import { getExtend, readBuffer, render, fileDownload, generateFilenameFromBlob } from './util'
 import EventBus from './util/EventBus'
 import { typeInfo } from './renders'
 import renders from './renders'
@@ -106,7 +106,7 @@ export default {
   props: {
     // 上传的地址
     fileUrl: {
-      type: [String, Object],
+      type: [String, Object, Blob],
       default: ''
     },
     // 是否显示头部
@@ -336,10 +336,12 @@ export default {
     displayResult(buffer, file) {
       // 取得文件名
       const { name, type } = file
-      this.uploadFileName = name
+      if (!name && !this.uploadFileName) {
+        this.uploadFileName = generateFilenameFromBlob(file)
+      }
       // 取得扩展名并统一转小写兼容大写
       const extend =
-        this.extend || getExtend(name).toLowerCase() || type.split('/')[1]
+        this.extend || getExtend(this.uploadFileName).toLowerCase() || type.split('/')[1]
       // 生成新的dom
       const node = document.createElement('div')
       // 清空容器里的元素
